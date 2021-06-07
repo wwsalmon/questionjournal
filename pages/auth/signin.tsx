@@ -31,7 +31,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (session && !session.userId) return {props: {notAllowed: true}};
 
     if (session && session.userId) {
-        return {redirect: {permanent: false, destination: "/projects",}};
+        return {redirect: {permanent: false, destination: "/app",}};
     } else {
         return {props: {notAllowed: false}};
     }

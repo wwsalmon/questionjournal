@@ -4,6 +4,7 @@ import Link from "next/link";
 interface ButtonPropsBase {
     children: ReactNode,
     className?: string,
+    color?: "red" | "yellow",
 }
 
 interface ButtonPropsLink extends ButtonPropsBase {
@@ -18,8 +19,8 @@ interface ButtonPropsButton extends ButtonPropsBase {
 
 type ButtonProps = ButtonPropsLink | ButtonPropsButton;
 
-export default function QjButton({onClick, href, children, className}: ButtonProps) {
-    const classNames = "h-10 rounded-full px-3 bg-qj-red text-white flex items-center " + (className || "");
+export default function QjButton({onClick, href, children, className, color = "red"}: ButtonProps) {
+    const classNames = "h-10 rounded-full px-3 flex items-center font-medium " + ({"red": "bg-qj-red text-white ", "yellow": "bg-qj-yellow "}[color]) + (className || "");
 
     return href ? (
         <Link href={href}>

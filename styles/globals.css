@@ -19,6 +19,10 @@ body {
     background-color: #F7EDE2;
 }
 
+.bg-qj-pale-red {
+    background-color: #F5CAC3;
+}
+
 .spinner {
     position: absolute;
     top: calc(50% - 0.5rem);

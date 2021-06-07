@@ -25,7 +25,7 @@ export default function NewAccount({}: {  }) {
                 setIsLoading(false);
             } else {
                 console.log("redirecting...");
-                signIn("google").then(() => router.push("/projects")).catch(e => console.log(e));
+                signIn("google").then(() => router.push("/app")).catch(e => console.log(e));
             }
         }).catch(e => {
             setIsLoading(false);
@@ -85,7 +85,7 @@ export default function NewAccount({}: {  }) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const session = await getSession(context);
 
-    if (!session || session.userId) return {redirect: {permanent: false, destination: session ? "/projects" : "/auth/signin",}};
+    if (!session || session.userId) return {redirect: {permanent: false, destination: session ? "/app" : "/auth/signin",}};
 
     return {props: {}};
 };
