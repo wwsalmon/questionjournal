@@ -3,6 +3,7 @@ import dbConnect from "../../utils/dbConnect";
 import {NextApiRequest, NextApiResponse} from "next";
 import {getSession} from "next-auth/client";
 import * as mongoose from "mongoose";
+import {mongo} from "mongoose";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     switch (req.method) {
@@ -43,26 +44,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
         case "POST": {
             const session = await getSession({ req });
-            if (!session) return res.status(403);
+            if (!session) return res.status(403).send("unauthed");
             try {
                 await dbConnect();
 
                 if (req.body.id) {
                     if (!(req.body.questionId || req.body.body)) {
-                        return res.status(406);
+                        return res.status(406).send("missing params");
                     }
                     const thisObject = await NoteModel.findById(req.body.id);
-                    if (!thisObject) return res.status(404);
+                    if (!thisObject) return res.status(404).send("not found");
 
-                    thisObject.questionId = req.body.questionId;
-                    thisObject.body = req.body.body;
+                    if (req.body.questionId) thisObject.questionId = req.body.questionId;
+                    if (req.body.body) thisObject.body = req.body.body;
 
                     await thisObject.save();
 
                     return res.status(200).json({message: "Object updated"});
                 } else {
                     if (!(req.body.questionId && req.body.body)) {
-                        return res.status(406);
+                        return res.status(406).send("missing params");
                     }
 
                     const newNote = new NoteModel({
@@ -81,17 +82,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         case "DELETE": {
             const session = await getSession({ req });
-            if (!session) return res.status(403);
+            if (!session) return res.status(403).send("unauthed");
 
-            if (!req.body.id) return res.status(406);
+            if (!req.body.id) return res.status(406).send("missing params");
 
             try {
                 await dbConnect();
 
-                const thisObject = await NoteModel.findById(req.body.id);
+                const thisObject = await NoteModel.aggregate([
+                    {$match: {_id: mongoose.Types.ObjectId(req.body.id)}},
+                    {$lookup: {
+                            from: "questions",
+                            localField: "questionId",
+                            foreignField: "_id",
+                            as: "questionArr",
+                        }}
+                ]);
 
-                if (!thisObject) return res.status(404);
-                if (thisObject.userId.toString() !== session.userId) return res.status(403);
+                if (!thisObject || !thisObject.length) return res.status(404).send("not found");
+
+                if (!thisObject[0].questionArr.length || thisObject[0].questionArr[0].userId.toString() !== session.userId) {
+                    return res.status(403).send("unauthed");
+                }
 
                 await NoteModel.deleteOne({_id: req.body.id});
 
@@ -102,6 +114,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         default:
-            return res.status(405);
+            return res.status(405).send("method not allowed");
     }
 }

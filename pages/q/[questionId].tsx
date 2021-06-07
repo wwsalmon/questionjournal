@@ -18,6 +18,11 @@ import Modal from "../../components/Modal";
 import SpinnerButton from "../../components/SpinnerButton";
 import Linkify from "react-linkify";
 import SEO from "../../components/SEO";
+import Button from "../../components/Button";
+import Skeleton from "react-loading-skeleton";
+import MoreMenu from "../../components/MoreMenu";
+import MoreMenuItem from "../../components/MoreMenuItem";
+import NoteItem from "../../components/NoteItem";
 
 export default function QuestionPage({question}: { question: DatedObj<QuestionObj> }) {
     const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -60,32 +65,19 @@ export default function QuestionPage({question}: { question: DatedObj<QuestionOb
                 </div>
                 <div
                     className={(data && data.data && data.data.length) ? "grid gap-y-8" : ""}
-                    style={{gridTemplateColumns: "8rem 1fr"}}
+                    style={{gridTemplateColumns: "8rem 1fr 2rem"}}
                 >
                     {(data && data.data) ? data.data.length ? data.data
                         .sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt))
                         .map(note => (
-                            <>
-                                <Label>{format(new Date(note.createdAt), "MMM d, yyyy")}</Label>
-                                <p className="text-lg content"><Linkify>{note.body}</Linkify></p>
-                            </>
+                            <NoteItem note={note} key={note._id} iter={iter} setIter={setIter}/>
                         )
                     ) : (
                         <p>No notes</p>
                     ) : (
-                        <p>Loading...</p>
+                        <Skeleton count={2}/>
                     )}
                 </div>
-                <Modal isOpen={modalOpen} setIsOpen={setModalOpen}>
-                    <Heading className="my-4">New note</Heading>
-                    <textarea
-                        value={body}
-                        onChange={e => setBody(e.target.value)}
-                        className="w-full border p-2 mb-4 text-lg"
-                        rows={5}
-                    />
-                    <SpinnerButton isLoading={isLoading} color="red" onClick={onSubmit} disabled={!body}>Save</SpinnerButton>
-                </Modal>
             </Container>
         </div>
     );

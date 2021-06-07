@@ -10,6 +10,7 @@ import useSWR, {SWRResponse} from "swr";
 import fetcher from "../utils/fetcher";
 import {DatedObj, QuestionObj} from "../utils/types";
 import {format} from "date-fns";
+import Skeleton from "react-loading-skeleton";
 
 export default function AppPage() {
     const {data: questions, error: questionsError}: SWRResponse<{ data: DatedObj<QuestionObj>[] }, any> = useSWR("/api/question", fetcher);
@@ -41,7 +42,7 @@ export default function AppPage() {
                             <p className="text-lg opacity-40">2</p>
                             <p className="text-lg opacity-20">{format(new Date(d.createdAt), "MMM d, yyyy")}</p>
                         </>
-                    )) : <p>No questions</p> : <p>Loading</p>}
+                    )) : <p>No questions</p> : <Skeleton/>}
                 </div>
             </Container>
         </div>
