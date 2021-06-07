@@ -49,3 +49,8 @@ button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
+
+.content a {
+    color: #F28482;
+    text-decoration: underline;
+}
