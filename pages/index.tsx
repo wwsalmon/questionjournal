@@ -1,6 +1,7 @@
 import QjButton from "../components/QjButton";
 import axios from "axios";
 import {useState} from "react";
+import SEO from "../components/SEO";
 
 interface WaitlistAPIRes {
     data: {
@@ -32,12 +33,7 @@ export default function Home() {
 
     return (
         <>
-            <div className="h-20 flex items-center px-4 sm:px-10 fixed top-0 left-0 right-0">
-                <p className="uppercase font-black text-xl text-black">Question Journal</p>
-                <div className="ml-auto flex items-center">
-                    <QjButton href="#waitlist">Sign up for waitlist</QjButton>
-                </div>
-            </div>
+            <SEO/>
             <div className="w-full pt-32 pb-56 bg-qj-yellow text-center px-4 sm:px-10">
                 <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-snug text-black max-w-2xl mx-auto">A notetaking app that helps you answer your biggest questions</h1>
                 <p className="sm:text-xl my-8 max-w-2xl mx-auto">Question Journal lets you document your questions and notes about them over time, centering curiosity in your learning.</p>
