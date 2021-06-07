@@ -6,15 +6,13 @@ import QjButton from "../components/QjButton";
 import Label from "../components/Label";
 import Button from "../components/Button";
 import Badge from "../components/Badge";
+import useSWR, {SWRResponse} from "swr";
+import fetcher from "../utils/fetcher";
+import {DatedObj, QuestionObj} from "../utils/types";
+import {format} from "date-fns";
 
 export default function AppPage() {
-    const testData = [{
-        question: "How does being an immigrant affect one's relationship with their childhood?",
-        archived: false,
-        tags: ["life"],
-        userId: "asdfasdf",
-        createdAt: "Feb 22, 2021"
-    }];
+    const {data: questions, error: questionsError}: SWRResponse<{ data: DatedObj<QuestionObj>[] }, any> = useSWR("/api/question", fetcher);
 
     return (
         <div className="w-full bg-qj-pale-yellow" style={{minHeight: "100vh"}}>
@@ -22,18 +20,18 @@ export default function AppPage() {
             <Container className="bg-white py-8 rounded-2xl shadow-md mt-24 max-w-6xl" padding={8}>
                 <div className="flex items-center">
                     <Heading>Questions</Heading>
-                    <QjButton className="ml-auto" onClick={() => null} color="yellow">+ New Question</QjButton>
+                    <QjButton className="ml-auto" href="/q/new" color="yellow">+ New Question</QjButton>
                 </div>
                 <div className="grid mt-8 mb-4 items-center" style={{gridTemplateColumns: "1fr 6rem 6rem 12rem"}}>
                     <Label>Question</Label>
-                    <Label>Tag</Label>
+                    <Label>Tags</Label>
                     <Label>Notes</Label>
                     <Label>Created</Label>
                     <hr className="col-span-4 my-2"/>
-                    {testData.map(d => (
+                    {(questions && questions.data) ? questions.data.length ? questions.data.map(d => (
                         <>
                             <div className="my-2">
-                                <Button href="/app" className="text-lg border-b">{d.question}</Button>
+                                <Button href={`/q/${d._id}`} className="text-lg border-b">{d.question}</Button>
                             </div>
                             <div className="flex items-center">
                                 {d.tags.map(tag => (
@@ -41,9 +39,9 @@ export default function AppPage() {
                                 ))}
                             </div>
                             <p className="text-lg opacity-40">2</p>
-                            <p className="text-lg opacity-20">{d.createdAt}</p>
+                            <p className="text-lg opacity-20">{format(new Date(d.createdAt), "MMM d, yyyy")}</p>
                         </>
-                    ))}
+                    )) : <p>No questions</p> : <p>Loading</p>}
                 </div>
             </Container>
         </div>

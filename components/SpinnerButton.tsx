@@ -1,11 +1,13 @@
 import Button from "./Button";
 import {ReactNode} from "react";
+import QjButton from "./QjButton";
 
 interface SpinnerButtonPropsBase {
     children: ReactNode,
     isLoading: boolean,
     className?: string,
     disabled?: boolean,
+    color: "red" | "yellow",
 }
 
 interface SpinnerButtonPropsLink extends SpinnerButtonPropsBase {
@@ -20,21 +22,21 @@ interface SpinnerButtonPropsButton extends SpinnerButtonPropsBase {
 
 type SpinnerButtonProps = SpinnerButtonPropsLink | SpinnerButtonPropsButton;
 
-export default function SpinnerButton({children, href, onClick, className, isLoading, disabled}: SpinnerButtonProps){
+export default function SpinnerButton({children, href, onClick, className, isLoading, disabled, color}: SpinnerButtonProps){
     return (
         <div className="relative inline-block">
             {href ? (
-                <Button href={href} className={className} disabled={disabled || isLoading}>
+                <QjButton href={href} className={className} disabled={disabled || isLoading} color={color}>
                     <div className={isLoading ? "invisible" : ""}>
                         {children}
                     </div>
-                </Button>
+                </QjButton>
             ) : (
-                <Button onClick={onClick} className={className} disabled={disabled || isLoading}>
+                <QjButton onClick={onClick} className={className} disabled={disabled || isLoading} color={color}>
                     <div className={isLoading ? "invisible" : ""}>
                         {children}
                     </div>
-                </Button>
+                </QjButton>
             )}
             {isLoading && <div className="spinner"/>}
         </div>
