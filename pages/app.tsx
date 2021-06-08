@@ -18,7 +18,7 @@ export default function AppPage() {
 
     return (
         <div className="w-full bg-qj-pale-yellow" style={{minHeight: "100vh"}}>
-            <SEO title="All questions"/>
+            <SEO title="Questions"/>
             <hr className="opacity-0"/>
             <Container className="bg-white py-8 rounded-2xl shadow-md mt-24 max-w-6xl" padding={8}>
                 <div className="flex items-center">

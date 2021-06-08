@@ -38,7 +38,7 @@ export default function SpinnerButton({children, href, onClick, className, isLoa
                     </div>
                 </QjButton>
             )}
-            {isLoading && <div className="spinner"/>}
+            {isLoading && <div className="qj-spinner"/>}
         </div>
     )
 }

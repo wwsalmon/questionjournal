@@ -23,7 +23,7 @@ body {
     background-color: #F5CAC3;
 }
 
-.spinner {
+.qj-spinner {
     position: absolute;
     top: calc(50% - 0.5rem);
     left: calc(50% - 0.5rem);
@@ -33,11 +33,6 @@ body {
     border: 0.2rem solid rgba(255, 255, 255, 0.3);
     border-top-color: white;
     animation: up-spin 1s linear infinite;
-}
-
-.up-spinner.dark {
-    border-color: rgba(0,0,0,0.3);
-    border-top-color: black;
 }
 
 @keyframes up-spin {
