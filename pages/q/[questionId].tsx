@@ -24,6 +24,7 @@ import MoreMenu from "../../components/MoreMenu";
 import MoreMenuItem from "../../components/MoreMenuItem";
 import NoteItem from "../../components/NoteItem";
 import {useRouter} from "next/router";
+import ellipsize from "ellipsize";
 
 export default function QuestionPage(props: { question: DatedObj<QuestionObj> }) {
     const router = useRouter();
@@ -90,7 +91,7 @@ export default function QuestionPage(props: { question: DatedObj<QuestionObj> })
 
     return (
         <div className="w-full bg-qj-pale-red" style={{minHeight: "100vh"}}>
-            <SEO/>
+            <SEO title={ellipsize(question.question, 30)}/>
             <hr className="opacity-0"/>
             <Container className="bg-white py-8 rounded-2xl shadow-md mt-24" padding={8} width="4xl">
                 <BackButton href="/app"/>

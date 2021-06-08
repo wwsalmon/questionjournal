@@ -11,12 +11,14 @@ import fetcher from "../utils/fetcher";
 import {DatedObj, QuestionObjGraph} from "../utils/types";
 import {format} from "date-fns";
 import Skeleton from "react-loading-skeleton";
+import SEO from "../components/SEO";
 
 export default function AppPage() {
     const {data: questions, error: questionsError}: SWRResponse<{ data: DatedObj<QuestionObjGraph>[] }, any> = useSWR("/api/question", fetcher);
 
     return (
         <div className="w-full bg-qj-pale-yellow" style={{minHeight: "100vh"}}>
+            <SEO title="All questions"/>
             <hr className="opacity-0"/>
             <Container className="bg-white py-8 rounded-2xl shadow-md mt-24 max-w-6xl" padding={8}>
                 <div className="flex items-center">
