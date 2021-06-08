@@ -8,12 +8,12 @@ import Button from "../components/Button";
 import Badge from "../components/Badge";
 import useSWR, {SWRResponse} from "swr";
 import fetcher from "../utils/fetcher";
-import {DatedObj, QuestionObj} from "../utils/types";
+import {DatedObj, QuestionObjGraph} from "../utils/types";
 import {format} from "date-fns";
 import Skeleton from "react-loading-skeleton";
 
 export default function AppPage() {
-    const {data: questions, error: questionsError}: SWRResponse<{ data: DatedObj<QuestionObj>[] }, any> = useSWR("/api/question", fetcher);
+    const {data: questions, error: questionsError}: SWRResponse<{ data: DatedObj<QuestionObjGraph>[] }, any> = useSWR("/api/question", fetcher);
 
     return (
         <div className="w-full bg-qj-pale-yellow" style={{minHeight: "100vh"}}>
@@ -39,7 +39,7 @@ export default function AppPage() {
                                     <Badge>{tag}</Badge >
                                 ))}
                             </div>
-                            <p className="text-lg opacity-40">2</p>
+                            <p className="text-lg opacity-40">{d.notesArr.length ? d.notesArr[0].numNotes : 0}</p>
                             <p className="text-lg opacity-20">{format(new Date(d.createdAt), "MMM d, yyyy")}</p>
                         </>
                     )) : <p>No questions</p> : <Skeleton/>}

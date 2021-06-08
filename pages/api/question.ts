@@ -20,7 +20,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 const thisObject = await QuestionModel.aggregate([
                     {$match: conditions},
-
+                    {$lookup: {
+                        from: "notes",
+                        let: {"questionId": "$_id"},
+                        pipeline: [
+                            {$match: {$expr: {$eq: ["$questionId", "$$questionId"]}}},
+                            {$count: "numNotes"},
+                        ],
+                        as: "notesArr",
+                    }},
                 ]);
 
                 if (!thisObject) return res.status(404);

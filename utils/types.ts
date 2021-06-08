@@ -22,6 +22,10 @@ export interface QuestionObj {
     tags: string[];
 }
 
+export interface QuestionObjGraph extends QuestionObj {
+    notesArr: {numNotes: number}[],
+}
+
 export interface NoteObj {
     questionId: string;
     body: string;
