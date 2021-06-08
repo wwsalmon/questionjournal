@@ -4,6 +4,7 @@ import {NextApiRequest, NextApiResponse} from "next";
 import {getSession} from "next-auth/client";
 import mongoose from "mongoose";
 import {SessionObj} from "../../utils/types";
+import {NoteModel} from "../../models/note";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     switch (req.method) {
@@ -85,6 +86,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 if (thisObject.userId.toString() !== session.userId) return res.status(403);
 
                 await QuestionModel.deleteOne({_id: req.body.id});
+
+                await NoteModel.deleteMany({questionId: req.body.id});
 
                 return res.status(200).json({message: "Object deleted"});
             } catch (e) {

@@ -49,7 +49,7 @@ export default function AppPage() {
     );
 }
 
-const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
     const session = await getSession(context);
     if (!session || !session.userId) return {redirect: {permanent: false, destination: "/auth/signin"}};
     return {props: {}};

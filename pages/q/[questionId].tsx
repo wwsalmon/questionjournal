@@ -10,7 +10,7 @@ import cleanForJSON from "../../utils/cleanForJSON";
 import Label from "../../components/Label";
 import {format} from "date-fns";
 import QjButton from "../../components/QjButton";
-import {useState} from "react";
+import React, {useState} from "react";
 import useSWR, {SWRResponse} from "swr";
 import fetcher from "../../utils/fetcher";
 import axios from "axios";
@@ -23,13 +23,54 @@ import Skeleton from "react-loading-skeleton";
 import MoreMenu from "../../components/MoreMenu";
 import MoreMenuItem from "../../components/MoreMenuItem";
 import NoteItem from "../../components/NoteItem";
+import {useRouter} from "next/router";
 
-export default function QuestionPage({question}: { question: DatedObj<QuestionObj> }) {
+export default function QuestionPage(props: { question: DatedObj<QuestionObj> }) {
+    const router = useRouter();
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [body, setBody] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [iter, setIter] = useState<number>(0);
-    const {data, error}: SWRResponse<{ data: DatedObj<NoteObj>[] }, any> = useSWR(`/api/note?questionId=${question._id}&iter=${iter}`, fetcher);
+    const {data, error}: SWRResponse<{ data: DatedObj<NoteObj>[] }, any> = useSWR(`/api/note?questionId=${props.question._id}&iter=${iter}`, fetcher);
+    const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
+    const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
+    const [editOpen, setEditOpen] = useState<boolean>(false);
+    const [editLoading, setEditLoading] = useState<boolean>(false);
+    const [question, setQuestion] = useState<DatedObj<QuestionObj>>(props.question);
+    const [name, setName] = useState<string>(props.question.question);
+
+    function onEdit() {
+        setEditLoading(true);
+
+        axios.post("/api/question", {
+            id: question._id,
+            question: name,
+        }).then(() => {
+            setEditLoading(false);
+            setEditOpen(false);
+            let newQuestion = {...question};
+            newQuestion.question = name;
+            setQuestion(newQuestion);
+        }).catch(e => {
+            setEditLoading(false);
+            console.log(e);
+        });
+    }
+
+    function onDelete() {
+        setDeleteLoading(true);
+
+        axios.delete("/api/question", {
+            data: {
+                id: question._id,
+            },
+        }).then(() => {
+            router.push("/app");
+        }).catch(e => {
+            setDeleteLoading(false);
+            console.log(e);
+        });
+    }
 
     function onSubmit() {
         setIsLoading(true);
@@ -53,7 +94,23 @@ export default function QuestionPage({question}: { question: DatedObj<QuestionOb
             <hr className="opacity-0"/>
             <Container className="bg-white py-8 rounded-2xl shadow-md mt-24" padding={8} width="4xl">
                 <BackButton href="/app"/>
-                <Heading>{question.question}</Heading>
+                <div className="flex">
+                    <Heading>{question.question}</Heading>
+                    <MoreMenu className="ml-auto">
+                        <MoreMenuItem text="Edit" onClick={() => setEditOpen(true)}/>
+                        <MoreMenuItem text="Delete" onClick={() => setDeleteOpen(true)}/>
+                    </MoreMenu>
+                </div>
+                <Modal isOpen={modalOpen} setIsOpen={setModalOpen}>
+                    <Heading className="my-4">New note</Heading>
+                    <textarea
+                        value={body}
+                        onChange={e => setBody(e.target.value)}
+                        className="w-full border p-2 mb-4 text-lg"
+                        rows={5}
+                    />
+                    <SpinnerButton isLoading={isLoading} color="red" onClick={onSubmit} disabled={!body}>Save</SpinnerButton>
+                </Modal>
                 <div className="flex items-center my-6">
                     <Label>Created</Label>
                     <p className="ml-4">{format(new Date(question.createdAt), "MMM d, yyyy")}</p>
@@ -78,6 +135,37 @@ export default function QuestionPage({question}: { question: DatedObj<QuestionOb
                         <Skeleton count={2}/>
                     )}
                 </div>
+                <Modal isOpen={editOpen} setIsOpen={setEditOpen}>
+                    <Heading className="my-4">Edit question</Heading>
+                    <input
+                        type="text"
+                        value={name}
+                        onChange={e => setName(e.target.value)}
+                        className="w-full border-b p-2 my-4 text-lg"
+                    />
+                    <div className="flex items-center">
+                        <SpinnerButton
+                            isLoading={editLoading}
+                            color="red"
+                            onClick={onEdit}
+                            disabled={!name || name === question.question}
+                        >Save</SpinnerButton>
+                        <Button onClick={() => setEditOpen(false)} className="ml-4">Cancel</Button>
+                    </div>
+                </Modal>
+                <Modal isOpen={deleteOpen} setIsOpen={setDeleteOpen}>
+                    <p className="mb-4">
+                        Are you sure you want to delete this project and all its notes? This action cannot be undone.
+                    </p>
+                    <div className="flex items-center">
+                        <SpinnerButton
+                            isLoading={deleteLoading}
+                            color="red"
+                            onClick={onDelete}
+                        >Delete</SpinnerButton>
+                        <Button onClick={() => setDeleteOpen(false)} className="ml-4">Cancel</Button>
+                    </div>
+                </Modal>
             </Container>
         </div>
     );

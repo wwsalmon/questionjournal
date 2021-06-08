@@ -1,7 +1,9 @@
-import {useSession} from "next-auth/client";
+import {signOut, useSession} from "next-auth/client";
 import Button from "./Button";
 import {useRouter} from "next/router";
 import QjButton from "./QjButton";
+import MoreMenu from "./MoreMenu";
+import MoreMenuItem from "./MoreMenuItem";
 
 export default function Navbar() {
     const [session, loading] = useSession();
@@ -12,11 +14,15 @@ export default function Navbar() {
             <p className="uppercase font-black text-xl text-black">Question Journal</p>
             <div className="ml-auto">
                 {(session && router.route !== "/") ? (
-                    <img
-                        src={session.user.image}
-                        alt={`Profile picture of ${session.user.name}`}
-                        className="w-8 h-8 rounded-full"
-                    />
+                    <MoreMenu customButton={(
+                        <img
+                            src={session.user.image}
+                            alt={`Profile picture of ${session.user.name}`}
+                            className="w-8 h-8 rounded-full"
+                        />
+                    )}>
+                        <MoreMenuItem text={"Sign out"} onClick={signOut}/>
+                    </MoreMenu>
                 ) : (
                     <div className="flex items-center">
                         <Button href="/auth/signin" className="mr-4">Sign in</Button>

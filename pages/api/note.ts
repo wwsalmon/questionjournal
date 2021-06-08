@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             try {
                 let conditions = {};
 
-                if (req.query.questionId) conditions["questionId"] = mongoose.Types.ObjectId(req.query.questionId);
+                if (req.query.questionId && !Array.isArray(req.query.questionId)) conditions["questionId"] = mongoose.Types.ObjectId(req.query.questionId);
 
                 await dbConnect();
 
@@ -31,7 +31,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     }}
                 ]);
 
-                if (!thisObject || !thisObject.length) return res.status(404).send("not found");
+                if (!thisObject) return res.status(404).send("not found");
+
+                if (!thisObject.length) return res.status(200).json({data: []});
 
                 if (!thisObject[0].questionArr.length || thisObject[0].questionArr[0].userId.toString() !== session.userId) {
                     return res.status(403).send("unauthed");
