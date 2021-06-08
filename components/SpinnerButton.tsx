@@ -7,7 +7,7 @@ interface SpinnerButtonPropsBase {
     isLoading: boolean,
     className?: string,
     disabled?: boolean,
-    color: "red" | "yellow",
+    color?: "red" | "yellow",
 }
 
 interface SpinnerButtonPropsLink extends SpinnerButtonPropsBase {
