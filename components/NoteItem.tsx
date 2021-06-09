@@ -54,11 +54,13 @@ export default function NoteItem({note, iter, setIter}: { note: DatedObj<NoteObj
     return (
         <>
             <Label>{format(new Date(note.createdAt), "MMM d, yyyy")}</Label>
-            <p className="text-lg content"><Linkify>{note.body}</Linkify></p>
-            <MoreMenu>
-                <MoreMenuItem text={"Edit"} onClick={() => setEditOpen(true)}/>
-                <MoreMenuItem text={"Delete"} onClick={() => setDeleteOpen(true)}/>
-            </MoreMenu>
+            <div className="flex w-full mb-8 md:mb-0">
+                <p className="text-lg content"><Linkify>{note.body}</Linkify></p>
+                <MoreMenu className="ml-auto">
+                    <MoreMenuItem text={"Edit"} onClick={() => setEditOpen(true)}/>
+                    <MoreMenuItem text={"Delete"} onClick={() => setDeleteOpen(true)}/>
+                </MoreMenu>
+            </div>
             <Modal isOpen={editOpen} setIsOpen={setEditOpen}>
                 <Heading className="my-4">Edit note</Heading>
                 <textarea

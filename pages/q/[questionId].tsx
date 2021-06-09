@@ -122,8 +122,8 @@ export default function QuestionPage(props: { question: DatedObj<QuestionObj> })
                     <QjButton onClick={() => setModalOpen(true)} className="ml-auto">+ New note</QjButton>
                 </div>
                 <div
-                    className={(data && data.data && data.data.length) ? "grid gap-y-8" : ""}
-                    style={{gridTemplateColumns: "8rem 1fr 2rem"}}
+                    className={(data && data.data && data.data.length) ? "md:grid gap-y-8" : ""}
+                    style={{gridTemplateColumns: "8rem 1fr"}}
                 >
                     {(data && data.data) ? data.data.length ? data.data
                         .sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt))

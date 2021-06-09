@@ -25,26 +25,28 @@ export default function AppPage() {
                     <Heading>Questions</Heading>
                     <QjButton className="ml-auto" href="/q/new" color="yellow">+ New Question</QjButton>
                 </div>
-                <div className="grid mt-8 mb-4 items-center" style={{gridTemplateColumns: "1fr 6rem 6rem 12rem"}}>
-                    <Label>Question</Label>
-                    <Label>Tags</Label>
-                    <Label>Notes</Label>
-                    <Label>Created</Label>
-                    <hr className="col-span-4 my-2"/>
-                    {(questions && questions.data) ? questions.data.length ? questions.data.map(d => (
-                        <>
-                            <div className="my-2">
-                                <Button href={`/q/${d._id}`} className="text-lg border-b">{d.question}</Button>
-                            </div>
-                            <div className="flex items-center">
-                                {d.tags.map(tag => (
-                                    <Badge>{tag}</Badge >
-                                ))}
-                            </div>
-                            <p className="text-lg opacity-40">{d.notesArr.length ? d.notesArr[0].numNotes : 0}</p>
-                            <p className="text-lg opacity-20">{format(new Date(d.createdAt), "MMM d, yyyy")}</p>
-                        </>
-                    )) : <p>No questions</p> : <Skeleton/>}
+                <div className="overflow-x-auto">
+                    <div className="grid mt-8 mb-4 items-center" style={{gridTemplateColumns: "minmax(16rem, 1fr) 6rem 6rem 12rem"}}>
+                        <Label>Question</Label>
+                        <Label>Tags</Label>
+                        <Label>Notes</Label>
+                        <Label>Created</Label>
+                        <hr className="col-span-4 my-2"/>
+                        {(questions && questions.data) ? questions.data.length ? questions.data.map(d => (
+                            <>
+                                <div className="my-2">
+                                    <Button href={`/q/${d._id}`} className="text-lg border-b">{d.question}</Button>
+                                </div>
+                                <div className="flex items-center">
+                                    {d.tags.map(tag => (
+                                        <Badge>{tag}</Badge >
+                                    ))}
+                                </div>
+                                <p className="text-lg opacity-40">{d.notesArr.length ? d.notesArr[0].numNotes : 0}</p>
+                                <p className="text-lg opacity-20">{format(new Date(d.createdAt), "MMM d, yyyy")}</p>
+                            </>
+                        )) : <p>No questions</p> : <Skeleton/>}
+                    </div>
                 </div>
             </Container>
         </div>
