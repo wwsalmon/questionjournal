@@ -19,9 +19,10 @@ export default function SignIn({notAllowed}: {notAllowed: boolean}) {
             <SEO title="Sign in"/>
             <Heading className="mb-4">Sign in</Heading>
             {notAllowed && (
-                <span>No account found for the given email. <Link href="/"><a>Sign up for the waitlist</a></Link> to get early access</span>
+                <span>No account found for the given email. <Link href="/auth/welcome"><a className="underline">Sign up for a new account here.</a></Link></span>
             )}
-            <p>If you already have a Question Journal account, click below to sign in.</p>
+            <p className="mb-4">If you already have a Question Journal account, click below to sign in.</p>
+            <p>If you don't have an account, <Link href="/auth/welcome"><a className="underline">sign up here.</a></Link></p>
             <div className="mt-4">
                 <SignInButton/>
             </div>

@@ -31,7 +31,7 @@ export default function Navbar() {
                 ) : (
                     <div className="flex items-center">
                         <Button href="/auth/signin" className="mr-4">Sign in</Button>
-                        <QjButton href="/#waitlist">Sign up for waitlist</QjButton>
+                        <QjButton href="/auth/welcome">Sign up</QjButton>
                     </div>
                 )}
             </div>

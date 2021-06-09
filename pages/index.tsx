@@ -19,18 +19,6 @@ export default function Home() {
     const [submitted, setSubmitted] = useState<WaitlistAPIRes>(null);
     const [error, setError] = useState<any>(null);
 
-    function onWaitlistSubmit() {
-        axios.post("/api/waitlist", {
-            email: email,
-            url: window.location.href,
-        }).then(res => {
-            setSubmitted(res.data);
-        }).catch(e => {
-            console.log(e);
-            setError(e);
-        });
-    }
-
     return (
         <>
             <SEO/>
@@ -44,16 +32,7 @@ export default function Home() {
                             Get your friends to sign up with this link to move up in the list: <code>{submitted && submitted.data.referral_link}</code>
                         </p>
                     ) : (
-                        <div className="mx-auto flex">
-                            <input
-                                type="text"
-                                className="py-2 px-4 rounded-full text-black"
-                                placeholder="Enter your email"
-                                value={email}
-                                onChange={e => setEmail(e.target.value)}
-                            />
-                            <QjButton onClick={onWaitlistSubmit} className="ml-2">Sign up for waitlist</QjButton>
-                        </div>
+                        <QjButton href="/auth/welcome" className="mx-auto">Give your curiosity superpowers</QjButton>
                     )}
                 </div>
             </div>
