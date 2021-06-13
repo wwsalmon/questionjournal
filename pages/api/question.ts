@@ -20,6 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 const thisObject = await QuestionModel.aggregate([
                     {$match: conditions},
+                    {$sort: {"createdAt": -1}},
                     {$lookup: {
                         from: "notes",
                         let: {"questionId": "$_id"},
