@@ -104,12 +104,21 @@ export default function QuestionPage(props: { question: DatedObj<QuestionObj> })
                 </div>
                 <Modal isOpen={modalOpen} setIsOpen={setModalOpen}>
                     <Heading className="my-4">New note</Heading>
-                    <textarea
-                        value={body}
-                        onChange={e => setBody(e.target.value)}
-                        className="w-full border p-2 mb-4 text-lg"
-                        rows={5}
-                    />
+                    <div className="grid">
+                        <textarea
+                            value={body}
+                            onChange={e => setBody(e.target.value)}
+                            className="w-full border p-2 mb-4 text-lg resize-none overflow-hidden"
+                            rows={5}
+                            style={{gridArea: "1/1/2/2"}}
+                        />
+                        <div
+                            className="w-full border p-2 mb-4 text-lg"
+                            style={{gridArea: "1/1/2/2"}}
+                        >
+                            {body}
+                        </div>
+                    </div>
                     <SpinnerButton isLoading={isLoading} color="red" onClick={onSubmit} disabled={!body}>Save</SpinnerButton>
                 </Modal>
                 <div className="flex items-center my-6">
