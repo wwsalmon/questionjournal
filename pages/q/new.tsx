@@ -9,6 +9,7 @@ import {useState} from "react";
 import SpinnerButton from "../../components/SpinnerButton";
 import axios from "axios";
 import {useRouter} from "next/router";
+import SEO from "../../components/SEO";
 
 export default function NewQuestion() {
     const router = useRouter();
@@ -31,6 +32,7 @@ export default function NewQuestion() {
 
     return (
         <div className="w-full bg-qj-yellow" style={{minHeight: "100vh"}}>
+            <SEO title="New question"/>
             <hr className="opacity-0"/>
             <Container className="bg-white py-8 rounded-2xl shadow-md mt-24" padding={8} width="4xl">
                 <BackButton href="/app"/>

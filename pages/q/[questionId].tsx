@@ -39,6 +39,9 @@ export default function QuestionPage(props: { question: DatedObj<QuestionObj> })
     const [editLoading, setEditLoading] = useState<boolean>(false);
     const [question, setQuestion] = useState<DatedObj<QuestionObj>>(props.question);
     const [name, setName] = useState<string>(props.question.question);
+    const [backdateOpen, setBackdateOpen] = useState<boolean>(false);
+    const [backDate, setBackDate] = useState<string>("");
+    const [backdateLoading, setBackdateLoading] = useState<boolean>(false);
 
     function onEdit() {
         setEditLoading(true);
@@ -89,6 +92,25 @@ export default function QuestionPage(props: { question: DatedObj<QuestionObj> })
         });
     }
 
+    function onBackdate() {
+        setBackdateLoading(true);
+
+        axios.post("/api/backdate", {
+            id: question._id,
+            date: backDate,
+        }).then(() => {
+            setBackdateLoading(false);
+            setBackdateOpen(false);
+            let newQuestion = {...question};
+            newQuestion.createdAt = backDate;
+            setQuestion(newQuestion);
+        }).catch(e => {
+            setBackdateLoading(false);
+            console.log(e);
+        });
+    }
+
+
     return (
         <div className="w-full bg-qj-pale-red" style={{minHeight: "100vh"}}>
             <SEO title={ellipsize(question.question, 30)}/>
@@ -100,6 +122,7 @@ export default function QuestionPage(props: { question: DatedObj<QuestionObj> })
                     <MoreMenu className="ml-auto">
                         <MoreMenuItem text="Edit" onClick={() => setEditOpen(true)}/>
                         <MoreMenuItem text="Delete" onClick={() => setDeleteOpen(true)}/>
+                        <MoreMenuItem text="Backdate" onClick={() => setBackdateOpen(true)}/>
                     </MoreMenu>
                 </div>
                 <Modal isOpen={modalOpen} setIsOpen={setModalOpen}>
@@ -122,6 +145,17 @@ export default function QuestionPage(props: { question: DatedObj<QuestionObj> })
                         </div>
                     </div>
                     <SpinnerButton isLoading={isLoading} color="red" onClick={onSubmit} disabled={!body}>Save</SpinnerButton>
+                </Modal>
+                <Modal isOpen={backdateOpen} setIsOpen={setBackdateOpen}>
+                    <Heading className="my-4">Backdate question</Heading>
+                    <p>Enter the date you want to backdate this question to.</p>
+                    <input
+                        type="date"
+                        value={backDate}
+                        onChange={e => setBackDate(e.target.value)}
+                        className="w-full border-b p-2 my-4 text-lg"
+                    />
+                    <SpinnerButton isLoading={backdateLoading} onClick={onBackdate}>Save</SpinnerButton>
                 </Modal>
                 <div className="flex items-center my-6">
                     <Label>Created</Label>
