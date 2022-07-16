@@ -1,9 +1,5 @@
-# Next Tailwind Typescript Example
+# question journal
 
-Use with `create-next-app`: `npx create-next-app -e https://github.com/wwsalmon/next-tailwind-typescript-example`
+a question-based notetaking app
 
-Compared to the default `create-next-app`, this example:
-- Has Typescript and TailwindCSS pre-configured
-- Has default `index.js`, `Home.module.css`, `pages/api/`, and `public/` stripped out
-- Has `_document.tsx` pre-configured
-- Adds `.env` to `.gitignore`
+![image](https://user-images.githubusercontent.com/25697428/179338733-4030cf81-0716-4dde-8694-708d74296eb5.png)
