@@ -11,7 +11,7 @@ export default function Welcome({}: {  }) {
         <Container className="max-w-sm mt-28" width="full">
             <SEO title="Sign in"/>
             <Heading className="mb-4">Welcome to Question Journal</Heading>
-            <p>Click the button below to sign in to or sign up for Postulate with your Google account.</p>
+            <p>Click the button below to sign in to or sign up for Question Journal with your Google account.</p>
             <div className="mt-4">
                 <SignInButton/>
             </div>
